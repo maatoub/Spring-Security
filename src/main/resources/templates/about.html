@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+    <title>Spring Security</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+      <div class="container">
+        <a class="navbar-brand text-white" href="#"
+          ><span th:text="${name}">user</span></a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-center"
+          id="navbarNavDropdown"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link active text-white"
+                aria-current="page"
+                th:href="@{/user/home}"
+                >Home</a
+              >
+            </li>
+
+            <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+              <a class="nav-link text-white" th:href="@{/admin/feature}"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" th:href="@{/user/pricing}"
+                >Pricing</a
+              >
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle text-white"
+                href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Profil
+              </a>
+              <ul
+                class="dropdown-menu"
+                aria-labelledby="navbarDropdownMenuLink"
+              >
+                <li>
+                  <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+      <span sec:authorize="hasAuthority('USER')"> no no no no </span>
+      <label>Hey, Admin only you can see me</label>
+    </div>
+    <div>
+      <!--<span sec:authentication="name">dadgh</span>-->
+      Roles:
+      <span sec:authentication="principal.authorities"></span>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
