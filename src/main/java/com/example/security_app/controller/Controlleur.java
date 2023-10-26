@@ -11,16 +11,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class Controlleur {
 
     @GetMapping("/home")
-    public String homePage(Model model) {
+    public String pageHome(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         model.addAttribute("name", name);
-        return "about";
+        return "home";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/feature")
     public String featuresPage() {
         return "features";
+    }
+
+    // **@PreAuthorize("hasRole('ADMIN','USER')")
+    @GetMapping("/auth/about")
+    public String aboutPage() {
+        return "about";
+    }
+
+    // **@PreAuthorize("hasRole('ADMIN','USER')")
+    @GetMapping("/auth/pricing")
+    public String pricingPage() {
+        return "pricing";
     }
 }

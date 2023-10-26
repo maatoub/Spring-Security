@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Configuration
 @EnableWebSecurity
@@ -18,10 +20,10 @@ public class SecurityConfig {
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         PasswordEncoder encoder = passwordEncoder();
         return new InMemoryUserDetailsManager(
-             
-         User.withUsername("nasser").password(encoder.encode("1234")).roles("ADMIN",
-        "USER").build(),
-        User.withUsername("saad").password(encoder.encode("0000")).roles("USER").build());
+
+                User.withUsername("nasser").password(encoder.encode("1234")).roles("ADMIN",
+                        "USER").build(),
+                User.withUsername("saad").password(encoder.encode("0000")).roles("USER").build());
     }
 
     @Bean
@@ -40,13 +42,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/css/**", "/home")
                         .permitAll()
-                        .requestMatchers("/admin/**", "/user/**")
-                        .hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/user/**")
-                        .hasRole("USER")
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/auth/**")
+                        .hasAnyRole("USER", "ADMIN")
                         .anyRequest()
                         .authenticated());
-
         return httpSecurity.build();
     }
+
+  /*
+  @Bean
+  public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.addDialect(new SpringSecurityDialect()); // Ajoutez le dialecte Spring Security
+        // Autres configurations de Thymeleaf
+        return templateEngine;
+    } */  
+    
+
 }
