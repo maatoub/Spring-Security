@@ -4,22 +4,21 @@
   xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
 >
   <head>
-    <title>Welcome to Spring Security Thymeleaf tutorial</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+    <title>Spring Security</title>
   </head>
   <body>
-    <h2>Welcome</h2>
-    <p>Spring Security Thymeleaf tutorial</p>
-    <div sec:authorize="hasRole('USER')">Text visible to user.</div>
-
-    <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-      This will only be displayed if authenticated user has role ROLE_ADMIN.
+    <h2 class="text-center mt-4">Welcome</h2>
+    <div class="text-center bg-info p-4 h5">
+      <div sec:authorize="hasRole('USER')">Text visible to user.</div>
+      <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        This will only be displayed if authenticated user has role ROLE_ADMIN.
+      </div>
+      <div sec:authorize="isAuthenticated()">
+        Text visible only to authenticated users.
+      </div>
+      Authenticated user roles:
+      <div sec:authentication="principal.authorities"></div>
     </div>
-    <div sec:authorize="isAuthenticated()">
-      Text visible only to authenticated users.
-    </div>
-    Authenticated username:
-    <div sec:authentication="name"></div>
-    Authenticated user roles:
-    <div sec:authentication="principal.authorities"></div>
   </body>
 </html>

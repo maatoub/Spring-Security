@@ -78,13 +78,13 @@
       <span sec:authorize="hasAuthority('USER')"> no no no no </span>
       <label>Hey, Admin only you can see me</label>
     </div>
-    <div>
+    <div class="m-4 h5">
       Roles:
-      <span sec:authentication="principal.authorities"></span>
+      <span class="p-2" sec:authentication="principal.authorities"></span>
     </div>
-    <div>
+    <div class="m-4 h5">
       username:
-      <span sec:authentication="name"></span>
+      <span class="p-2" sec:authentication="name"></span>
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

@@ -1,7 +1,9 @@
+
 package com.example.security_app.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -9,11 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -33,11 +34,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        // httpSecurity.formLogin(login -> login.loginPage("/login").permitAll());
         httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .formLogin(req -> req
+                .formLogin(req -> req.loginPage("/login")
                         .defaultSuccessUrl("/home")
-                        // Redirect to "/success" if information are correct
+                        // Redirect to "/home" if information are correct
                         .permitAll())
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/css/**", "/home")
@@ -48,17 +50,10 @@ public class SecurityConfig {
                         .hasAnyRole("USER", "ADMIN")
                         .anyRequest()
                         .authenticated());
+        httpSecurity.exceptionHandling(
+                handling -> handling.accessDeniedPage("/notAuthorized"))
+                .rememberMe(remember -> remember.key("myKey").tokenValiditySeconds(8000));
+
         return httpSecurity.build();
     }
-
-  /*
-  @Bean
-  public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.addDialect(new SpringSecurityDialect()); // Ajoutez le dialecte Spring Security
-        // Autres configurations de Thymeleaf
-        return templateEngine;
-    } */  
-    
-
 }

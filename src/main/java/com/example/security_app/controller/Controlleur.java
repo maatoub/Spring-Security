@@ -18,7 +18,7 @@ public class Controlleur {
         return "home";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/feature")
     public String featuresPage() {
         return "features";
